@@ -1,7 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import React from "react";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import Nav from "@/components/Navbar";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -18,15 +20,11 @@ export const metadata: Metadata = {
     description: "Top 50 artists and tracks using the Last.fm API",
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
+        <Nav />
         {children}
         </body>
         </html>

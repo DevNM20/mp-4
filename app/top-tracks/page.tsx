@@ -1,80 +1,37 @@
-import styled from "styled-components";
+// app/top-tracks/page.tsx
 import getData from "@/lib/getData";
 
-
-const PageContainer = styled.div`
-    background-color: #0b0b0b;
-    color: white;
-    padding: 20px;
-    text-align: center;
-`;
-
-const Title = styled.h1`
-    color: #c99700;
-    font-size: 28px;
-    margin-bottom: 20px;
-`;
-
-const TrackContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-`;
-
-const Card = styled.div`
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    margin: 10px;
-    padding: 10px;
-    width: 180px;
-    text-align: center;
-`;
-
-const Img = styled.img`
-    width: 100%;
-    height: 160px;
-    border-radius: 6px;
-    background-color: #222;
-`;
-
-const Name = styled.p`
-    font-weight: bold;
-    margin-top: 8px;
-    margin-bottom: 4px;
-`;
-
-const Artist = styled.p`
-    font-size: 13px;
-    color: #bbb;
-    margin: 0;
-`;
-
-const Plays = styled.p`
-    font-size: 12px;
-    color: #888;
-    margin-top: 6px;
-`;
-
 export default async function TopTracksPage() {
-    const tracks = await getData("tracks");
+    let data;
+    //Try and catch for API calls
+    try {
+        data = await getData("tracks");
+    } catch (error) {
+        console.log("API has failed please fix it", error);
+        //This will be returned if it fails
+        return <h1>API data can't be retrieved</h1>;
+    }
+
+    if (!data || (data as any).error) {
+        return <p>Unable to obtain API data</p>;
+    }
+
+    //Checks if the given data is an array and if it isn't it will be treated like an empty array
+    const tracks: any[] = Array.isArray(data) ? data : [];
 
     return (
-        <PageContainer>
-            <Title>Top 50 Tracks on Last.fm</Title>
-            <TrackContainer>
-                {tracks.map((t: any, i: number) => (// t represents the current track object and i represents the position of where the loop is in the array
-                    //The img tag  takes the URL that is stored in the third element of the image array for all tracks
-                    <Card key={`${t.name}-${i}`}>
-                        <Img src={t.image?.[2]?.["#text"] || ""} alt={t.name} />
-                        <Name>
-                            {i + 1}. {t.name}
-                        </Name>
-                        <Artist>{t.artist.name}</Artist>
-                        <Plays>{t.playcount} plays</Plays>
-                    </Card>
+        <main>
+            <h1>Top 50 Tracks on Last.fm</h1>
+            <ol>
+                {tracks.map((t, i) => (
+// t represents the current track object and i represents the position of where the loop is in the array
+// i represents the position of where the loop is at
+                    <li key={`${t.name}-${i}`}>
+                        {i + 1}. {t.name} {t.artist?.name ? `— ${t.artist.name}` : ""}
+                        {t.playcount ? ` (${t.playcount} plays)` : ""}
+                    </li>
                 ))}
-
-            </TrackContainer>
-        </PageContainer>
+            </ol>
+        </main>
     );
 }
