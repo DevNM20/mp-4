@@ -22,7 +22,7 @@ export default async function TopTracksPage() {
     return (
         <main>
             <h1>Top 50 Tracks on Last.fm</h1>
-            <ol>
+            <ul>
                 {tracks.map((t, i) => (
 // t represents the current track object and i represents the position of where the loop is in the array
 // i represents the position of where the loop is at
@@ -31,7 +31,7 @@ export default async function TopTracksPage() {
                         {t.playcount ? ` (${t.playcount} plays)` : ""}
                     </li>
                 ))}
-            </ol>
+            </ul>
         </main>
     );
 }

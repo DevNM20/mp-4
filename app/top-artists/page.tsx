@@ -11,18 +11,15 @@ export default async function TopArtistsPage() {
         //This will be returned if it fails
         return <h1>API data can't be retrieved</h1>
     }
-
     if (!data || (data as any).error) {
-        return <p>Unable to obtain API data</p>;
+        return <p>Can't get API data</p>;
     }
     //Checks if the given data is an array and if it isn't it will be treated like an empty array
-
     const artists: any[] = Array.isArray(data) ? data : [];
-
     return (
         <main>
             <h1>Top 50 Artists on Last.fm</h1>
-            <ol>
+            <ul>
                 {artists.map((a, i) => (
                     // a represents the current track object and i represents the position of where the loop is in the array
 // i represents the position of where the loop is at
@@ -30,7 +27,7 @@ export default async function TopArtistsPage() {
                         {i + 1}. {a.name} {a.listeners ? `— ${a.listeners} listeners` : ""}
                     </li>
                 ))}
-            </ol>
+            </ul>
         </main>
     );
 }
